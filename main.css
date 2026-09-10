@@ -1,0 +1,139 @@
+body {
+  margin: 0;
+  background-color: #f4f7f5;
+  color: #222;
+  font-family: Arial, sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+}
+
+.page-header {
+  text-align: center;
+  padding: 55px 20px 35px;
+}
+
+.page-header h1 {
+  color: #006633;
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.page-header p {
+  color: #666;
+  font-size: 16px;
+}
+.search-area {
+  width: 85%;
+  max-width: 1100px;
+  margin: 0 auto 40px;
+  display: flex;
+  gap: 15px;
+}
+.search-area input {
+  flex: 1;
+  padding: 15px 18px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 15px;
+  outline: none;
+}
+.search-area input:focus {
+  border-color: #006633;
+}
+.search-area select {
+  width: 220px;
+  padding: 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: white;
+  font-size: 15px;
+  cursor: pointer;
+}
+.events-container {
+  width: 85%;
+  max-width: 1100px;
+  margin: auto;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 25px;
+  padding-bottom: 60px;
+}
+.event-card {
+  background-color: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: 0.3s;
+}
+.event-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+}
+
+.event-content {
+  padding: 22px;
+}
+.category {
+  display: inline-block;
+  background-color: #d8f3dc;
+  color: #006633;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: bold;
+  margin-bottom: 12px;
+}
+.event-content h2 {
+  font-size: 20px;
+  margin: 0 0 15px;
+  color: #222;
+}
+.event-info {
+  color: #666;
+  font-size: 14px;
+
+  line-height: 1.8;
+
+  margin-bottom: 18px;
+}
+footer {
+  background-color: #004d26;
+  color: white;
+  text-align: center;
+  padding: 25px;
+}
+footer p {
+  font-size: 14px;
+  margin: 0;
+}
+@media (max-width: 900px) {
+  .events-container {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 650px) {
+  nav {
+    padding: 15px 25px;
+    flex-direction: column;
+    gap: 15px;
+  }
+  nav ul {
+    gap: 15px;
+  }
+  .search-area {
+    flex-direction: column;
+    width: 90%;
+  }
+  .search-area select {
+    width: 100%;
+  }
+  .events-container {
+    grid-template-columns: 1fr;
+    width: 90%;
+  }
+  .page-header h1 {
+    font-size: 30px;
+  }
+}
