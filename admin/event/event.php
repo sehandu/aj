@@ -4,17 +4,17 @@ include '../../db/db.php';
 
 // Ensure user is logged in as admin
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../../authentication/login/login.php");
-    exit();
+  header('Location: ../../authentication/login/login.php');
+  exit();
 }
 
 $msg = $_GET['msg'] ?? '';
 
 // Fetch categories for filter dropdown
-$categories_res = $conn->query("SELECT * FROM categories ORDER BY category_name ASC");
+$categories_res = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
 
 // Fetch events from database
-$sql = "SELECT * FROM events ORDER BY event_date ASC";
+$sql = 'SELECT * FROM events ORDER BY event_date ASC';
 $result = $conn->query($sql);
 ?>
 <!doctype html>
@@ -40,24 +40,19 @@ $result = $conn->query($sql);
       <div style="max-width: 1100px; margin: 0 auto 20px; padding: 0 20px;">
         <?php if (!empty($msg)): ?>
           <div style="background:#dcfce7; color:#166534; padding:12px; border-radius:8px; text-align:center; font-weight:bold; margin-bottom:20px;">
-            <?php echo htmlspecialchars($msg); ?>
+            <?php echo $msg; ?>
           </div>
         <?php endif; ?>
       </div>
 
       <div class="search-area">
-        <input
-          type="text"
-          id="search"
-          placeholder="Search Events by title..."
-          onkeyup="filterEvents()"
-        />
+       
         <select id="categoryFilter" onchange="filterEvents()">
           <option value="all">All Categories</option>
           <?php if ($categories_res && $categories_res->num_rows > 0): ?>
             <?php while ($cat = $categories_res->fetch_assoc()): ?>
-              <option value="<?php echo strtolower(htmlspecialchars($cat['category_name'])); ?>">
-                <?php echo htmlspecialchars($cat['category_name']); ?>
+              <option value="<?php echo $cat['category_name']; ?>">
+                <?php echo $cat['category_name']; ?>
               </option>
             <?php endwhile; ?>
           <?php endif; ?>
@@ -81,16 +76,15 @@ $result = $conn->query($sql);
                 <h2><?php echo $row['event_title']; ?></h2>
                 <div class="event-info">
                   <strong>Date:</strong> <?php echo $row['event_date']; ?>
-                  <?php if (!empty($row['event_time'])): ?>
+                  
                     | <strong>Time:</strong> <?php echo $row['event_time']; ?>
-                  <?php endif; ?>
+                 
                   <br />
-                  <?php if (!empty($row['event_venue'])): ?>
+                  
                     <strong>Venue:</strong> <?php echo $row['event_venue']; ?><br />
-                  <?php endif; ?>
-                  <?php if (!empty($row['organizer'])): ?>
+                
                     <strong>Organizer:</strong> <?php echo $row['organizer']; ?><br />
-                  <?php endif; ?>
+                  
                   <strong>Max Participants:</strong> <?php echo $row['max_participants']; ?><br />
                   <i><?php echo $row['description']; ?></i>
                 </div>

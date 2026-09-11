@@ -3,25 +3,25 @@ session_start();
 include '../../db/db.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../../authentication/login/login.php");
+    header('Location: ../../authentication/login/login.php');
     exit();
 }
 
-$error_msg   = "";
-$success_msg = "";
+$error_msg = '';
+$success_msg = '';
 
 // Handle Announcement Creation
-if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['action']) && $_POST['action'] === 'create') {
-    $title = trim($_POST['title'] ?? '');
-    $text  = trim($_POST['text'] ?? '');
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
+    $title = $_POST['title'];
+    $text = $_POST['text'];
 
     if (empty($title) || empty($text)) {
-        $error_msg = "Both title and text content are required.";
+        $error_msg = 'Both title and text content are required.';
     } else {
         if ($conn->query("INSERT INTO announcements (title, text) VALUES ('$title', '$text')")) {
-            $success_msg = "Announcement published successfully!";
+            $success_msg = 'Announcement published successfully!';
         } else {
-            $error_msg = "Error publishing announcement.";
+            $error_msg = 'Error publishing announcement.';
         }
     }
 }
@@ -31,12 +31,12 @@ if (isset($_GET['delete'])) {
     $ann_id = intval($_GET['delete']);
     if ($ann_id > 0) {
         $conn->query("DELETE FROM announcements WHERE announcement_id = $ann_id");
-        $success_msg = "Announcement deleted successfully!";
+        $success_msg = 'Announcement deleted successfully!';
     }
 }
 
 // Fetch announcements
-$result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
+$result = $conn->query('SELECT * FROM announcements ORDER BY created_at DESC');
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -49,8 +49,8 @@ $result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
     <link rel="stylesheet" href="event.css">
     <script>
         function validateAnnouncementForm() {
-            var title = document.getElementById("ann_title").value.trim();
-            var text = document.getElementById("ann_text").value.trim();
+            var title = document.getElementById("ann_title").value;
+            var text = document.getElementById("ann_text").value;
             if (title === "") {
                 alert("Please enter announcement title.");
                 document.getElementById("ann_title").focus();
@@ -71,19 +71,19 @@ $result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
 
         <section class="page-header">
             <h1>Manage Announcements</h1>
-            <p><i>Post and manage important updates for students</i></p>
+            <p>Post and manage important updates for students</p>
         </section>
 
         <main style="max-width: 1000px; margin: 0 auto 40px; padding: 0 20px;">
             <?php if (!empty($success_msg)): ?>
                 <div style="background:#dcfce7; color:#166534; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; font-weight:bold;">
-                    <?php echo htmlspecialchars($success_msg); ?>
+                    <?php echo $success_msg; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (!empty($error_msg)): ?>
                 <div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; font-weight:bold;">
-                    <?php echo htmlspecialchars($error_msg); ?>
+                    <?php echo $error_msg; ?>
                 </div>
             <?php endif; ?>
 
@@ -115,8 +115,8 @@ $result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
                     <?php if ($result && $result->num_rows > 0): ?>
                         <?php while ($ann = $result->fetch_assoc()): ?>
                             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:15px; margin-bottom:15px; position:relative;">
-                                <h4 style="margin:0 0 8px 0; color:#0f172a;"><?php echo htmlspecialchars($ann['title']); ?></h4>
-                                <p style="margin:0 0 10px 0; color:#475569; font-size:14px;"><?php echo nl2br(htmlspecialchars($ann['text'])); ?></p>
+                                <h4 style="margin:0 0 8px 0; color:#0f172a;"><?php echo $ann['title']; ?></h4>
+                                <p style="margin:0 0 10px 0; color:#475569; font-size:14px;"><?php echo nl2br($ann['text']); ?></p>
                                 <small style="color:#94a3b8;">Posted on: <?php echo date('M d, Y H:i', strtotime($ann['created_at'])); ?></small>
                                 <div style="margin-top:10px;">
                                     <a href="announcements.php?delete=<?php echo $ann['announcement_id']; ?>" onclick="return confirm('Delete this announcement?');" style="background:#dc2626; color:white; padding:4px 10px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:bold;">Delete</a>
@@ -136,3 +136,4 @@ $result = $conn->query("SELECT * FROM announcements ORDER BY created_at DESC");
     </footer>
 </body>
 </html>
+

@@ -3,7 +3,7 @@ session_start();
 include '../../db/db.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../../authentication/login/login.php");
+    header('Location: ../../authentication/login/login.php');
     exit();
 }
 
@@ -31,7 +31,7 @@ $result = $conn->query($query);
 
         <section class="page-header">
             <h1>Student Event Registrations</h1>
-            <p><i>View all student event registrations in real time</i></p>
+            <p>View all student event registrations in real time</p>
         </section>
 
         <main style="max-width: 1100px; margin: 0 auto 40px; padding: 0 20px;">
@@ -58,11 +58,11 @@ $result = $conn->query($query);
                             <?php while ($row = $result->fetch_assoc()): ?>
                                 <tr style="border-bottom:1px solid #e2e8f0;">
                                     <td style="padding:12px;"><?php echo $row['registration_id']; ?></td>
-                                    <td style="padding:12px; font-weight:bold;"><?php echo htmlspecialchars($row['full_name']); ?></td>
-                                    <td style="padding:12px; color:#2563eb;"><?php echo htmlspecialchars($row['email']); ?></td>
-                                    <td style="padding:12px; font-weight:bold; color:#0f172a;"><?php echo htmlspecialchars($row['event_title']); ?></td>
-                                    <td style="padding:12px;"><span style="background:#d8f3dc; color:#006633; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;"><?php echo htmlspecialchars($row['category']); ?></span></td>
-                                    <td style="padding:12px;"><?php echo htmlspecialchars($row['event_date']); ?></td>
+                                    <td style="padding:12px; font-weight:bold;"><?php echo $row['full_name']; ?></td>
+                                    <td style="padding:12px; color:#2563eb;"><?php echo $row['email']; ?></td>
+                                    <td style="padding:12px; font-weight:bold; color:#0f172a;"><?php echo $row['event_title']; ?></td>
+                                    <td style="padding:12px;"><span style="background:#d8f3dc; color:#006633; padding:4px 8px; border-radius:4px; font-size:12px; font-weight:bold;"><?php echo $row['category']; ?></span></td>
+                                    <td style="padding:12px;"><?php echo $row['event_date']; ?></td>
                                     <td style="padding:12px; color:#64748b; font-size:13px;"><?php echo date('M d, Y H:i', strtotime($row['registered_at'])); ?></td>
                                 </tr>
                             <?php endwhile; ?>
@@ -82,3 +82,4 @@ $result = $conn->query($query);
     </footer>
 </body>
 </html>
+

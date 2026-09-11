@@ -3,14 +3,14 @@ session_start();
 include '../../db/db.php';
 
 if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
-    header("Location: ../../authentication/login/login.php");
+    header('Location: ../../authentication/login/login.php');
     exit();
 }
 
 $selected_event_id = intval($_GET['event_id'] ?? 0);
 
 // Fetch all events for the dropdown selector
-$events_result = $conn->query("SELECT event_id, event_title, event_date FROM events ORDER BY event_date DESC");
+$events_result = $conn->query('SELECT event_id, event_title, event_date FROM events ORDER BY event_date DESC');
 
 // Fetch participants if an event is selected
 $participants = [];
@@ -41,13 +41,6 @@ if ($selected_event_id > 0) {
     <link rel="stylesheet" href="../../components/style.css">
     <link rel="stylesheet" href="../../main.css">
     <link rel="stylesheet" href="event.css">
-    <style>
-        @media print {
-            nav, .page-header, .no-print, footer { display: none !important; }
-            body { background: white !important; }
-            .print-container { box-shadow: none !important; margin: 0 !important; width: 100% !important; }
-        }
-    </style>
 </head>
 <body>
     <div class="page">
@@ -57,7 +50,7 @@ if ($selected_event_id > 0) {
 
         <section class="page-header no-print">
             <h1>Generate Participant Lists</h1>
-            <p><i>Select an event to view or print the list of registered participants</i></p>
+            <p>Select an event to view or print the list of registered participants</p>
         </section>
 
         <main style="max-width: 1000px; margin: 0 auto 40px; padding: 0 20px;">
@@ -69,7 +62,7 @@ if ($selected_event_id > 0) {
                         <?php if ($events_result && $events_result->num_rows > 0): ?>
                             <?php while ($ev = $events_result->fetch_assoc()): ?>
                                 <option value="<?php echo $ev['event_id']; ?>" <?php if ($selected_event_id == $ev['event_id']) echo 'selected'; ?>>
-                                    <?php echo htmlspecialchars($ev['event_title']) . " (" . $ev['event_date'] . ")"; ?>
+                                    <?php echo $ev['event_title'] . ' (' . $ev['event_date'] . ')'; ?>
                                 </option>
                             <?php endwhile; ?>
                         <?php endif; ?>
@@ -82,14 +75,13 @@ if ($selected_event_id > 0) {
                 <div class="print-container" style="background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                     <div style="display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid #006633; padding-bottom:15px; margin-bottom:20px;">
                         <div>
-                            <h2 style="margin:0 0 5px 0; color:#006633;"><?php echo htmlspecialchars($event_details['event_title']); ?></h2>
+                            <h2 style="margin:0 0 5px 0; color:#006633;"><?php echo $event_details['event_title']; ?></h2>
                             <p style="margin:0; color:#64748b;">
-                                <strong>Date:</strong> <?php echo htmlspecialchars($event_details['event_date']); ?> | 
-                                <strong>Time:</strong> <?php echo htmlspecialchars($event_details['event_time']); ?> | 
-                                <strong>Venue:</strong> <?php echo htmlspecialchars($event_details['event_venue']); ?>
+                                <strong>Date:</strong> <?php echo $event_details['event_date']; ?> | 
+                                <strong>Time:</strong> <?php echo $event_details['event_time']; ?> | 
+                                <strong>Venue:</strong> <?php echo $event_details['event_venue']; ?>
                             </p>
                         </div>
-                        <button onclick="window.print()" class="no-print" style="background:#2563eb; color:white; padding:8px 16px; border:none; border-radius:6px; font-weight:bold; cursor:pointer;">🖨️ Print Participant List</button>
                     </div>
 
                     <p style="font-weight:bold; color:#334155; margin-bottom:15px;">
@@ -103,7 +95,7 @@ if ($selected_event_id > 0) {
                                 <th style="padding:10px;">Participant Name</th>
                                 <th style="padding:10px;">Email Address</th>
                                 <th style="padding:10px;">Registration Date</th>
-                                <th style="padding:10px; width:120px;" class="no-print">Attendance Signature</th>
+                                
                             </tr>
                         </thead>
                         <tbody>
@@ -111,10 +103,10 @@ if ($selected_event_id > 0) {
                                 <?php foreach ($participants as $idx => $p): ?>
                                     <tr style="border-bottom:1px solid #e2e8f0;">
                                         <td style="padding:10px;"><?php echo $idx + 1; ?></td>
-                                        <td style="padding:10px; font-weight:bold;"><?php echo htmlspecialchars($p['full_name']); ?></td>
-                                        <td style="padding:10px; color:#2563eb;"><?php echo htmlspecialchars($p['email']); ?></td>
+                                        <td style="padding:10px; font-weight:bold;"><?php echo $p['full_name']; ?></td>
+                                        <td style="padding:10px; color:#2563eb;"><?php echo $p['email']; ?></td>
                                         <td style="padding:10px; color:#64748b;"><?php echo date('M d, Y H:i', strtotime($p['registered_at'])); ?></td>
-                                        <td style="padding:10px;" class="no-print">_________________</td>
+                                        
                                     </tr>
                                 <?php endforeach; ?>
                             <?php else: ?>
@@ -138,3 +130,4 @@ if ($selected_event_id > 0) {
     </footer>
 </body>
 </html>
+

@@ -12,8 +12,8 @@ $success_msg = '';
 
 // Handle Category Creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
-    $category_name = trim($_POST['category_name'] ?? '');
-    $description = trim($_POST['description'] ?? '');
+    $category_name = $_POST['category_name'];
+    $description = $_POST['description'];
 
     if (empty($category_name)) {
         $error_msg = 'Category name is required.';
@@ -49,7 +49,7 @@ $result = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
     <link rel="stylesheet" href="event.css">
     <script>
         function validateCategoryForm() {
-            var name = document.getElementById("category_name").value.trim();
+            var name = document.getElementById("category_name").value;
             if (name === "") {
                 alert("Please enter a category name.");
                 document.getElementById("category_name").focus();
@@ -65,19 +65,19 @@ $result = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
 
         <section class="page-header">
             <h1>Manage Event Categories</h1>
-            <p><i>Add or delete categories for university events</i></p>
+            <p>Add or delete categories for university events</p>
         </section>
 
         <main style="max-width: 1000px; margin: 0 auto 40px; padding: 0 20px;">
             <?php if (!empty($success_msg)): ?>
                 <div style="background:#dcfce7; color:#166534; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; font-weight:bold;">
-                    <?php echo htmlspecialchars($success_msg); ?>
+                    <?php echo $success_msg; ?>
                 </div>
             <?php endif; ?>
 
             <?php if (!empty($error_msg)): ?>
                 <div style="background:#fee2e2; color:#991b1b; padding:12px; border-radius:8px; margin-bottom:20px; text-align:center; font-weight:bold;">
-                    <?php echo htmlspecialchars($error_msg); ?>
+                    <?php echo $error_msg; ?>
                 </div>
             <?php endif; ?>
 
@@ -119,10 +119,10 @@ $result = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
                                 <?php while ($cat = $result->fetch_assoc()): ?>
                                     <tr style="border-bottom:1px solid #e2e8f0;">
                                         <td style="padding:10px;"><?php echo $cat['category_id']; ?></td>
-                                        <td style="padding:10px; font-weight:bold;"><?php echo htmlspecialchars($cat['category_name']); ?></td>
-                                        <td style="padding:10px; color:#64748b; font-size:14px;"><?php echo htmlspecialchars($cat['description']); ?></td>
+                                        <td style="padding:10px; font-weight:bold;"><?php echo $cat['category_name']; ?></td>
+                                        <td style="padding:10px; color:#64748b; font-size:14px;"><?php echo $cat['description']; ?></td>
                                         <td style="padding:10px; text-align:center;">
-                                            <a href="categories.php?delete=<?php echo $cat['category_id']; ?>" onclick="return confirm('Delete category <?php echo addslashes($cat['category_name']); ?>?');" style="background:#dc2626; color:white; padding:6px 12px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:bold;">Delete</a>
+                                            <a href="categories.php?delete=<?php echo $cat['category_id']; ?>" onclick="return confirm('Delete category <?php echo $cat['category_name']; ?>?');" style="background:#dc2626; color:white; padding:6px 12px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:bold;">Delete</a>
                                         </td>
                                     </tr>
                                 <?php endwhile; ?>
@@ -143,3 +143,4 @@ $result = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
     </footer>
 </body>
 </html>
+
