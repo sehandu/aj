@@ -9,21 +9,21 @@ $category = $_GET['category'] ?? 'all';
 // Registered events list
 $registered_ids = [];
 if ($user_id && $user_role === 'student') {
-  $res = $conn->query("SELECT event_id FROM event_registrations WHERE user_id = $user_id");
-  if ($res) {
-    while ($r = $res->fetch_assoc()) {
-      $registered_ids[] = $r['event_id'];
+    $res = $conn->query("SELECT event_id FROM event_registrations WHERE user_id = $user_id");
+    if ($res) {
+        while ($r = $res->fetch_assoc()) {
+            $registered_ids[] = $r['event_id'];
+        }
     }
-  }
 }
 
 // Categories & Events
 $categories = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
 
 if (!empty($category) && $category !== 'all') {
-  $sql = "SELECT * FROM events WHERE category = '$category' ORDER BY event_date ASC";
+    $sql = "SELECT * FROM events WHERE category = '$category' ORDER BY event_date ASC";
 } else {
-  $sql = 'SELECT * FROM events ORDER BY event_date ASC';
+    $sql = 'SELECT * FROM events ORDER BY event_date ASC';
 }
 $events = $conn->query($sql);
 ?>
@@ -34,6 +34,7 @@ $events = $conn->query($sql);
     <title>Upcoming Events | NSBM EventHub</title>
     <link rel="stylesheet" href="../components/style.css">
     <link rel="stylesheet" href="event.css">
+    <link rel="stylesheet" href="../main.css">
 </head>
 <body>
     <div class="page">
@@ -62,8 +63,8 @@ $events = $conn->query($sql);
             <?php if ($events && $events->num_rows > 0): ?>
                 <?php
                 while ($row = $events->fetch_assoc()):
-                  $is_registered = in_array($row['event_id'], $registered_ids);
-                  ?>
+                    $is_registered = in_array($row['event_id'], $registered_ids);
+                    ?>
                     <div class="event-card">
                         <?php if (!empty($row['image'])): ?>
                             <img src="../uploads/<?php echo $row['image']; ?>" alt="<?php echo $row['event_title']; ?>" style="width:100%; height:180px; object-fit:cover; border-radius:8px 8px 0 0;">

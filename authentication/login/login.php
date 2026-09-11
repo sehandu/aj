@@ -3,42 +3,39 @@ session_start();
 include '../../db/db.php';
 
 $error = '';
-$msg   = $_GET['msg'] ?? '';
+$msg = $_GET['msg'] ?? '';
 
-if (isset($_POST['login'])) {
-    $email    = trim($_POST['email'] ?? '');
-    $password = trim($_POST['password'] ?? '');
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+  $email = trim($_POST['email'] ?? '');
+  $password = trim($_POST['password'] ?? '');
 
-    if (empty($email) || empty($password)) {
-        $error = "Please fill in all required fields.";
-    } else {
-        $result = $conn->query("SELECT * FROM users WHERE email = '$email'");
+  if (empty($email) || empty($password)) {
+    $error = 'Please fill in all required fields.';
+  } else {
+    $result = $conn->query("SELECT * FROM users WHERE email = '$email'");
 
-        if ($result && $result->num_rows > 0) {
-            $user = $result->fetch_assoc();
+    if ($result && $result->num_rows > 0) {
+      $user = $result->fetch_assoc();
 
-            $passMatches = password_verify($password, $user['encripted_password']) || 
-                           $password === $user['encripted_password'] || 
-                           ($user['role'] === 'admin' && $password === 'admin123') || 
-                           ($user['role'] === 'student' && ($password === 'Student@123' || $password === '123456'));
+      $passMatches = password_verify($password, $user['encripted_password']);
 
-            if ($passMatches) {
-                $_SESSION['user_id']     = $user['user_id'];
-                $_SESSION['user_name']   = $user['full_name'];
-                $_SESSION['user_email']  = $user['email'];
-                $_SESSION['role']        = $user['role'];
-                $_SESSION['logged_in']   = true;
+      if ($passMatches) {
+        $_SESSION['user_id'] = $user['user_id'];
+        $_SESSION['user_name'] = $user['full_name'];
+        $_SESSION['user_email'] = $user['email'];
+        $_SESSION['role'] = $user['role'];
+        $_SESSION['logged_in'] = true;
 
-                if ($user['role'] === 'admin') {
-                    header("Location: ../../admin/eventhub_dashboard.php");
-                } else {
-                    header("Location: ../../student/student_dashboard.php");
-                }
-                exit();
-            }
+        if ($user['role'] === 'admin') {
+          header('Location: ../../admin/eventhub_dashboard.php');
+        } else {
+          header('Location: ../../student/student_dashboard.php');
         }
-        $error = "Invalid email or password!";
+        exit();
+      }
     }
+    $error = 'Invalid email or password!';
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -73,13 +70,7 @@ if (isset($_POST['login'])) {
     <?php endif; ?>
 
     <form action="login.php" method="POST" onsubmit="return validateLoginForm();">
-      <div class="form-group">
-        <label>Select Role</label>
-        <select name="role" id="role" onchange="switchRole(this.value)" style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
-          <option value="student">Student</option>
-          <option value="admin">Administrator</option>
-        </select>
-      </div>
+      
 
       <div class="form-group">
         <label id="userLabel">Student Email or ID</label>
