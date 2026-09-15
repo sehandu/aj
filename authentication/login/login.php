@@ -3,11 +3,10 @@ session_start();
 include '../../db/db.php';
 
 $error = '';
-$msg = $_GET['msg'] ?? '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $email = trim($_POST['email'] ?? '');
-  $password = trim($_POST['password'] ?? '');
+  $email = $_POST['email'];
+  $password = $_POST['password'];
 
   if (empty($email) || empty($password)) {
     $error = 'Please fill in all required fields.';
@@ -54,26 +53,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       <h2>Portal Login</h2>
       <p class="subtitle">Sign in to continue to NSBM EventHub</p>
     </div>
-
-    <!-- Error Message -->
     <?php if (!empty($error)): ?>
       <div style="background:#fee2e2; color:#991b1b; padding:10px; border-radius:8px; margin-bottom:15px; text-align:center; font-size:14px;">
-        <?php echo htmlspecialchars($error); ?>
+        <?php echo $error; ?>
       </div>
     <?php endif; ?>
 
-    <!-- Success Message -->
-    <?php if (!empty($msg)): ?>
-      <div style="background:#dcfce7; color:#166534; padding:10px; border-radius:8px; margin-bottom:15px; text-align:center; font-size:14px;">
-        <?php echo htmlspecialchars($msg); ?>
-      </div>
-    <?php endif; ?>
 
-    <form action="login.php" method="POST" onsubmit="return validateLoginForm();">
+    <form action="login.php" method="POST" onsubmit="return validateLoginForm(event);">
       
 
       <div class="form-group">
-        <label id="userLabel">Student Email or ID</label>
+        <label>Student Email or ID</label>
         <input type="text" name="email" id="email" placeholder="student@students.nsbm.ac.lk" required style="width:100%; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
       </div>
 
@@ -86,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
     
     <p style="text-align:center; margin-top:20px; font-size:14px; color:#64748b;">
-      Don't have a student account? <a href="../register/index.html" style="color:#006633; text-decoration:none; font-weight:bold;">Register Here</a>
+      Don't have a student account? <a href="../register/index.php" style="color:#006633; text-decoration:none; font-weight:bold;">Register Here</a>
     </p>
   </div>
 

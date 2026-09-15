@@ -105,7 +105,7 @@ if ($selected_event_id > 0) {
                                         <td style="padding:10px;"><?php echo $idx + 1; ?></td>
                                         <td style="padding:10px; font-weight:bold;"><?php echo $p['full_name']; ?></td>
                                         <td style="padding:10px; color:#2563eb;"><?php echo $p['email']; ?></td>
-                                        <td style="padding:10px; color:#64748b;"><?php echo date('M d, Y H:i', strtotime($p['registered_at'])); ?></td>
+                                        <td style="padding:10px; color:#64748b;"><?php echo $p['registered_at']; ?></td>
                                         
                                     </tr>
                                 <?php endforeach; ?>

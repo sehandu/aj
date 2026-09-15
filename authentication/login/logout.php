@@ -2,6 +2,6 @@
 session_start();
 session_unset();
 session_destroy();
-header("Location: login.php?msg=" . urlencode("You have successfully logged out!"));
+header('Location: login.php');
 exit();
 ?>

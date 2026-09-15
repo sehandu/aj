@@ -10,7 +10,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
 $error_msg = '';
 $success_msg = '';
 
-// Handle Announcement Creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
     $title = $_POST['title'];
     $text = $_POST['text'];
@@ -26,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Handle Announcement Deletion
 if (isset($_GET['delete'])) {
     $ann_id = intval($_GET['delete']);
     if ($ann_id > 0) {
@@ -35,7 +33,6 @@ if (isset($_GET['delete'])) {
     }
 }
 
-// Fetch announcements
 $result = $conn->query('SELECT * FROM announcements ORDER BY created_at DESC');
 ?>
 <!DOCTYPE html>
@@ -88,7 +85,6 @@ $result = $conn->query('SELECT * FROM announcements ORDER BY created_at DESC');
             <?php endif; ?>
 
             <div style="display: flex; gap: 30px; flex-wrap: wrap;">
-                <!-- Form to Post Announcement -->
                 <div style="flex: 1; min-width: 300px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                     <h3 style="color:#006633; margin-top:0;">New Announcement</h3>
                     <form action="announcements.php" method="POST" onsubmit="return validateAnnouncementForm();">
@@ -108,7 +104,6 @@ $result = $conn->query('SELECT * FROM announcements ORDER BY created_at DESC');
                     </form>
                 </div>
 
-                <!-- Announcements List -->
                 <div style="flex: 2; min-width: 320px; background: white; padding: 25px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05);">
                     <h3 style="color:#006633; margin-top:0;">Published Announcements</h3>
                     
@@ -116,8 +111,8 @@ $result = $conn->query('SELECT * FROM announcements ORDER BY created_at DESC');
                         <?php while ($ann = $result->fetch_assoc()): ?>
                             <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:8px; padding:15px; margin-bottom:15px; position:relative;">
                                 <h4 style="margin:0 0 8px 0; color:#0f172a;"><?php echo $ann['title']; ?></h4>
-                                <p style="margin:0 0 10px 0; color:#475569; font-size:14px;"><?php echo nl2br($ann['text']); ?></p>
-                                <small style="color:#94a3b8;">Posted on: <?php echo date('M d, Y H:i', strtotime($ann['created_at'])); ?></small>
+                                <p style="margin:0 0 10px 0; color:#475569; font-size:14px;"><?php echo $ann['text']; ?></p>
+                                <small style="color:#94a3b8;">Posted on: <?php echo $ann['created_at']; ?></small>
                                 <div style="margin-top:10px;">
                                     <a href="announcements.php?delete=<?php echo $ann['announcement_id']; ?>" onclick="return confirm('Delete this announcement?');" style="background:#dc2626; color:white; padding:4px 10px; border-radius:4px; text-decoration:none; font-size:12px; font-weight:bold;">Delete</a>
                                 </div>

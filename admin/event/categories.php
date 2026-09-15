@@ -10,7 +10,6 @@ if (!isset($_SESSION['logged_in']) || $_SESSION['role'] !== 'admin') {
 $error_msg = '';
 $success_msg = '';
 
-// Handle Category Creation
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'create') {
     $category_name = $_POST['category_name'];
     $description = $_POST['description'];
@@ -26,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['
     }
 }
 
-// Handle Category Deletion
 if (isset($_GET['delete'])) {
     $cat_id = intval($_GET['delete']);
     if ($cat_id > 0) {
@@ -35,7 +33,6 @@ if (isset($_GET['delete'])) {
     }
 }
 
-// Fetch categories
 $result = $conn->query('SELECT * FROM categories ORDER BY category_name ASC');
 ?>
 <!DOCTYPE html>
